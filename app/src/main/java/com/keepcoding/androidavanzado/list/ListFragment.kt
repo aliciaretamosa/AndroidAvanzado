@@ -21,21 +21,28 @@ class ListFragment : Fragment() {
 
     ): View? {
         binding = FragmentListBinding.inflate(layoutInflater)
-        val adapter = ListAdapter()
-        adapter.submit(viewModel.getHeroList())
 
-        with(binding) {
-            rvHeroes.adapter = adapter
-            rvHeroes.layoutManager = LinearLayoutManager(binding.root.context)
-        }
-
+        initListRun(viewModel.getHeroList())
 
         // Inflate the layout for this fragment
         return binding.root
     }
 
+    fun initListRun(list: List<String>) {
+        val adapter = ListAdapter()
+        adapter.submit(list)
+        with(binding) {
+            rvHeroes.adapter = adapter
+            rvHeroes.layoutManager = LinearLayoutManager(binding.root.context)
+        }
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.heros.observe(viewLifecycleOwner) {heroList ->
+        initListRun(viewModel.getHeroList())
+        }
+        viewModel.getData()
 
-
+    }
 
 
 
